@@ -2,6 +2,7 @@ import request from "supertest";
 import mongoose from "mongoose";
 import { app } from '../../app';
 import { Ticket } from "../../models/ticket";
+import { natsWrapper } from "../../nats-wrapper";
 
 const initialTicket = {
     title: 'asdf',
@@ -117,3 +118,25 @@ test('should update the ticket',async() => {
     expect(ticketResponse.body.title).toEqual(newTicket.title);
     expect(ticketResponse.body.price).toEqual(newTicket.price);
 });
+
+test('it publishes an event', async () => {
+    const cookie = global.signin();
+
+    const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({
+        title: initialTicket.title,
+        price: initialTicket.price
+    });
+
+    await request(app)
+        .put(`/api/tickets/${response.body.id}`)
+        .set('Cookie', cookie)
+        .send({
+            title: newTicket.title,
+            price: newTicket.price
+        })
+        .expect(200);
+    expect(natsWrapper.client.publish).toHaveBeenCalledTimes(1);
+})

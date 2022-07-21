@@ -4,15 +4,16 @@ import mongoose from 'mongoose';
 import { app } from '../app';
 import jwt from 'jsonwebtoken';
 
-
 declare global {
     var getAuthCookie: () => Promise<string[]>;
     var signin: () => string[];
 }
+
+jest.mock('../nats-wrapper');
+
 let mongo: MongoMemoryServer;
-
-
 beforeEach(async () => {
+    jest.clearAllMocks();
     process.env.JWT_KEY = 'FDSSFA'; // quick and dirty fix
     mongo = await MongoMemoryServer.create();
     const uri = mongo.getUri();
