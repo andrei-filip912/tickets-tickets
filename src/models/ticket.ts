@@ -13,7 +13,8 @@ interface TicketDocument extends mongoose.Document {
     title: string;
     price: number;
     userId: string;
-    version: number; 
+    version: number;
+    orderId?: string;
 }
 
 // interface that defines param and return types for a model build method
@@ -33,6 +34,9 @@ const ticketSchema = new mongoose.Schema({
     userId: {
         type: String,
         required: true
+    },
+    orderId: {
+        type: String
     }
 }, {
     toJSON: {
