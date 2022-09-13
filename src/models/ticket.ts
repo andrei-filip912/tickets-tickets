@@ -1,4 +1,6 @@
 import mongoose, { Mongoose } from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
+
 // interface that describes a Ticket's properties types
 interface TicketAttributes {
     title: string;
@@ -11,6 +13,8 @@ interface TicketDocument extends mongoose.Document {
     title: string;
     price: number;
     userId: string;
+    version: number;
+    orderId?: string;
 }
 
 // interface that defines param and return types for a model build method
@@ -30,6 +34,9 @@ const ticketSchema = new mongoose.Schema({
     userId: {
         type: String,
         required: true
+    },
+    orderId: {
+        type: String
     }
 }, {
     toJSON: {
@@ -39,6 +46,10 @@ const ticketSchema = new mongoose.Schema({
         }
     }
 });
+
+// updateIfCurrent plugin
+ticketSchema.set('versionKey', 'version');
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 ticketSchema.statics.build = (attr: TicketAttributes) => {
     return new Ticket(attr);

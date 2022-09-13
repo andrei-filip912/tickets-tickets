@@ -4,7 +4,8 @@ import {
     validateRequest,
     NotFoundError,
     requireAuth,
-    UnauthorizedError
+    UnauthorizedError,
+    BadRequestError
 } from '@frst-ticket-app/common';
 import { Ticket } from '../models/ticket';
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
@@ -29,6 +30,10 @@ async (req: Request, res: Response) => {
         throw new NotFoundError();
     }
 
+    if(ticket.orderId) {
+        throw new BadRequestError('The ticket cannot be edited, since it already is reserved');
+    }
+
     if(ticket.userId !== req.currentUser!.id) {
         throw new UnauthorizedError();
     }
@@ -42,7 +47,8 @@ async (req: Request, res: Response) => {
         id: ticket.id,
         title: ticket.title,
         price: ticket.price,
-        userId: ticket.userId
+        userId: ticket.userId,
+        version: ticket.version
     })
     res.send(ticket);
 });
