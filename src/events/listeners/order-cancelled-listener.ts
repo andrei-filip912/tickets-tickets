@@ -26,6 +26,9 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
             userId: ticket.userId,
             price: ticket.price,
             title: ticket.title,
+            date: ticket.date,
+            location: ticket.location,
+            description: ticket.description,
             version: ticket.version
         });
 
