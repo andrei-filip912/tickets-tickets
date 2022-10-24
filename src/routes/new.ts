@@ -18,9 +18,7 @@ router.post('/api/tickets', requireAuth, [
     body('date')
         .not()
         .isEmpty()
-        .withMessage('Date is required')
-        .isDate()
-        .withMessage('You must provide a valid date'),
+        .withMessage('Date is required'),
     body('location')
         .not()
         .isEmpty()

@@ -20,7 +20,15 @@ router.put('/api/tickets/:id', requireAuth, [
         .withMessage('Title is required'),
     body('price')
         .isFloat({ gt: 0 })
-        .withMessage('Please provide a price greater than 0')
+        .withMessage('Please provide a price greater than 0'),
+    body('date')
+        .not()
+        .isEmpty()
+        .withMessage('Date is required'),
+    body('location')
+        .not()
+        .isEmpty()
+        .withMessage('Location is required'),
 ],
     validateRequest,
     async (req: Request, res: Response) => {
@@ -40,7 +48,10 @@ router.put('/api/tickets/:id', requireAuth, [
 
         ticket.set({
             title: req.body.title,
-            price: req.body.price
+            price: req.body.price,
+            date: req.body.date,
+            location: req.body.location,
+            description: req.body.description
         });
         await ticket.save();
         new TicketUpdatedPublisher(natsWrapper.client).publish({

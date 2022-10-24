@@ -12,6 +12,8 @@ const setup = async () => {
         title: 'asdf',
         price: 432,
         userId: 'fasdf',
+        date: new Date(),
+        location: 'Den Haag'
     });
     ticket.set({ orderId });
     await ticket.save();

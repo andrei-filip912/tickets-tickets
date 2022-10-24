@@ -8,7 +8,8 @@ router.get('/api/tickets', async (req: Request, res: Response) => {
     const tickets = await Ticket.find({
         orderId: undefined
     });
-
+    console.log(tickets);
+    
     res.send(tickets);
 });
 
