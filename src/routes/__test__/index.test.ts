@@ -8,7 +8,10 @@ const createTicket = () => {
    .set('Cookie', global.signin())
    .send({
        title: 'asdfa',
-       price: 42
+       price: 42,
+       date: new Date(),
+       location: 'somewhere',
+       description: 'ffff',
    });
 }
 
@@ -21,6 +24,9 @@ test('should fetch a list of tickets', async () => {
         .get('/api/tickets')
         .send()
         .expect(200);
+    console.log(response.body);
+    
 
+    
     expect(response.body.length).toEqual(3);
 })

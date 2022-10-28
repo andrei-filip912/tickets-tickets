@@ -16,13 +16,17 @@ test('should return 404 if no ticket is found', async () => {
 test('should return the actual ticket, if it exists', async () => {
     const title = 'concert';
     const price = 42;
+    const date= new Date();
+    const location = 'asd';
 
     const response = await request(app)
         .post('/api/tickets')
         .set('Cookie', global.signin())
         .send({
             title: title,
-            price: price
+            price: price,
+            date: date,
+            location: location
         })
         .expect(201);
     
