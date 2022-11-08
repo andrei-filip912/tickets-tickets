@@ -18,7 +18,14 @@ router.post('/api/tickets', requireAuth, [
     body('date')
         .not()
         .isEmpty()
-        .withMessage('Date is required'),
+        .withMessage('Date is required')
+        .custom(value => {
+            const date = new Date(value)
+            if(date < new Date()) {
+                throw new Error('Date cannot be in the past');
+            }
+            return true;
+        }),
     body('location')
         .not()
         .isEmpty()
